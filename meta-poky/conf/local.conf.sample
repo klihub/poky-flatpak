@@ -235,3 +235,47 @@ PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
 # track the version of this file when it was generated. This can safely be ignored if
 # this doesn't mean anything to you.
 CONF_VERSION = "1"
+
+#########################################################################
+
+# An uncommented include below enables support for flatpak applications.
+# If you'd like to enable support for flatpak applications and building 
+# flatpak SDK runtime repositories, which you can use on your flatpak-
+# enabled host to build flatpak applications for a flatpak-enabled version
+# of an image, enabled the require line below. Currently there are two
+# sample images predefined: core-image-flatpak-runtime (to be used on a target
+# device) and core-image-flatpak-sdk (to be used as a flatpak SDK runtime on
+# your development host).
+#
+
+include conf/distro/include/flatpak-applications.inc
+
+# Override the default settings to enable generating flatpak repositories
+# for all images. Otherwise flatpak repositories would be built only for
+# flatpak SDK images.
+
+FLATPAK_IMAGE_PATTERN = "glob:*"
+
+# Add 0.5G of extra space, so we'll have some to spare for pulling in
+# extra apps as flatpaks.
+
+IMAGE_ROOTFS_EXTRA_SPACE = "${@ 0.5 * 1024 * 1024}"
+
+# Let's add ssh, ssh server and scp so we can easily copy stuff in and
+# out the image. Also make sure ncurses is there, as we'll be building
+# some sample flatpaks that will use it.
+
+IMAGE_EXTRA_INSTALL += "openssh-sshd openssh-ssh openssh-scp ncurses"
+
+# Enable debug-tweaks which will allow us to log in as root without a
+# a root password.
+
+IMAGE_EXTRA_FEATURES += "debug-tweaks"
+
+# Let's enable building ext4 images, and SDL-based qemu VGA console
+# emulation. We'll use qemu to test our images.
+
+IMAGE_FSTYPES += "ext4"
+PACKAGECONFIG_append_pn-qemu-native = " sdl"
+PACKAGECONFIG_append_pn-nativesdk-qemu = " sdl"
+

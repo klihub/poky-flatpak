@@ -5,3 +5,12 @@ Common targets are:
     meta-ide-support
 
 You can also run generated qemu images with a command like 'runqemu qemux86'
+
+If you enable flatpak applications (by default they are enabled, see the
+comments in local.conf), you get two additional sample images you can build:
+    core-image-flatpak-runtime    flatpak-enabled version of core-image-minimal
+    core-image-flatpak-sdk        SDK flatpak runtime for core-image-minimal
+
+The runtime image is meant to be run on a target device while the SDK
+image is meant to be used as a flatpak SDK runtime on your development
+host to produce flatpaks for the device running the runtime image.
